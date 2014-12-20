@@ -35,6 +35,7 @@ def get_rate_type(db):
         else:
             return 0
 
+
 def get_cw_sensor():
     """Returns the citizenwatt sensor object or None"""
     db = create_session()
@@ -59,7 +60,7 @@ database.Base.metadata.create_all(engine)
 sensor = get_cw_sensor()
 while not sensor or not sensor.aes_key:
     tools.warning("Install is not complete ! " +
-                    "Visit http://citizenwatt.local first.")
+                  "Visit http://citizenwatt.local first.")
     time.sleep(1)
     sensor = get_cw_sensor()
 
@@ -76,20 +77,15 @@ try:
     with open(config.get("named_fifo"), 'rb') as fifo:
         while True:
             power = random.randint(0, 3000)
-            print("Power: "+str(power)
+            print("Power: "+str(power))
 
-			db = create_session()
-			measure_db = database.Measures(sensor_id=sensor.id,
-										   value=power,
-										   timestamp=datetime.datetime.now().timestamp(),
-										   night_rate=get_rate_type(db))
-			db.add(measure_db)
-			sensor.last_timer = timer
-			(db.query(database.Sensor)
-			 .filter_by(name="CitizenWatt")
-			 .update({"last_timer": sensor.last_timer}))
-			db.commit()
-			print("Saved successfully.")
+            db = create_session()
+            measure_db = database.Measures(sensor_id=sensor.id,
+                                           value=power,
+                                           timestamp=datetime.datetime.now().timestamp(),
+                                           night_rate=get_rate_type(db))
+            db.add(measure_db)
+            db.commit()
+            print("Saved successfully.")
 except KeyboardInterrupt:
     pass
-
