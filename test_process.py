@@ -69,23 +69,17 @@ key = struct.pack("<16B", *key)
 
 
 try:
-    assert(stat.S_ISFIFO(os.stat(config.get("named_fifo")).st_mode))
-except (AssertionError, FileNotFoundError):
-    sys.exit("Unable to open fifo " + config.get("named_fifo") + ".")
+    while True:
+        power = random.randint(0, 3000)
+        print("Power: "+str(power))
 
-try:
-    with open(config.get("named_fifo"), 'rb') as fifo:
-        while True:
-            power = random.randint(0, 3000)
-            print("Power: "+str(power))
-
-            db = create_session()
-            measure_db = database.Measures(sensor_id=sensor.id,
-                                           value=power,
-                                           timestamp=datetime.datetime.now().timestamp(),
-                                           night_rate=get_rate_type(db))
-            db.add(measure_db)
-            db.commit()
-            print("Saved successfully.")
+        db = create_session()
+        measure_db = database.Measures(sensor_id=sensor.id,
+                                        value=power,
+                                        timestamp=datetime.datetime.now().timestamp(),
+                                        night_rate=get_rate_type(db))
+        db.add(measure_db)
+        db.commit()
+        print("Saved successfully.")
 except KeyboardInterrupt:
     pass
