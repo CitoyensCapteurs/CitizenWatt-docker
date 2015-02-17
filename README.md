@@ -16,7 +16,7 @@ docker build --tag citizenwatt .
 Then, run the container:
 
 ```
-docker run -t -i -p 8080:8080 cw
+docker run -t -i -p 8080:8080 citizenwatt
 ```
 
 
