@@ -16,6 +16,9 @@ RUN chmod 775 /tmp/init.sh
 RUN /tmp/init.sh
 RUN rm /tmp/init.sh
 
+RUN sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/9.1/main/postgresql.conf
+RUN echo "host    all         all         0.0.0.0/0             md5" >> /etc/postgresql/9.1/main/pg_hba.conf
+
 # Get CitizenWatt
 RUN git clone https://github.com/CitoyensCapteurs/CitizenWatt-Base /opt/citizenwatt
 ADD test_process.py /opt/citizenwatt/test_process.py
